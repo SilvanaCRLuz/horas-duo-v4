@@ -2,19 +2,18 @@
 <title>Duo Estratégico • Controle de Horas V3</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fa;color:#243447}header{height:64px;background:#17365d;color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}.brand{font-size:18px;font-weight:700}.brand small{display:block;font-size:10px;opacity:.8}.layout{display:flex;min-height:calc(100vh - 64px)}nav{width:220px;background:#102a47;padding:15px 10px}nav button{width:100%;border:0;background:transparent;color:#dce7f3;text-align:left;padding:12px;border-radius:7px;margin:3px 0;font-weight:700;cursor:pointer}nav button.active,nav button:hover{background:#24517e;color:#fff}main{flex:1;padding:24px;max-width:1550px}.page{display:none}.page.active{display:block}h1{margin:0 0 5px;font-size:25px}h2{font-size:18px;margin:0 0 14px}.sub{color:#718096;font-size:13px;margin-bottom:20px}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.card{background:#fff;border:1px solid #e0e6ed;border-radius:12px;padding:17px;margin-bottom:16px;box-shadow:0 2px 8px #00000008}.kpi{border-left:4px solid #32679b}.kpi small{color:#718096}.kpi strong{display:block;font-size:25px;margin-top:6px}.form{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.full{grid-column:1/-1}label{font-size:12px;font-weight:700;display:block;margin-bottom:5px}input,select,textarea{width:100%;padding:10px;border:1px solid #ccd5df;border-radius:7px;font-size:14px;background:#fff}textarea{min-height:80px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.btn{border:0;border-radius:7px;padding:10px 15px;font-weight:700;cursor:pointer}.primary{background:#1f6feb;color:#fff}.success{background:#198754;color:#fff}.warning{background:#d97706;color:#fff}.danger{background:#dc3545;color:#fff}.light{background:#e8eef5;color:#243447}.dark{background:#17365d;color:#fff}.timer{text-align:center;font-size:38px;font-weight:700;margin:8px}.center{text-align:center}.muted{color:#718096;font-size:12px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:9px;border-bottom:1px solid #e5e9ee;text-align:left;vertical-align:top}th{background:#f7f9fb}.badge{display:inline-block;border-radius:20px;padding:4px 7px;font-size:10px;font-weight:700}.green{background:#e8f7ee;color:#14723e}.yellow{background:#fff3df;color:#9a5b00}.gray{background:#edf2f7;color:#4a5568}.red{background:#feecee;color:#a51d2d}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.search{max-width:320px}.note{padding:12px;background:#eef5ff;border-radius:8px;font-size:13px}.money{font-weight:700}.modal{display:none;position:fixed;inset:0;background:#0008;align-items:center;justify-content:center;padding:20px;z-index:10}.modal.show{display:flex}.modalbox{background:#fff;border-radius:12px;padding:22px;max-width:760px;width:100%;max-height:90vh;overflow:auto}
-#loginOverlay{position:fixed;inset:0;background:#17365d;display:flex;align-items:center;justify-content:center;z-index:100}.login-box{background:#fff;padding:30px;border-radius:12px;width:100%;max-width:380px;box-shadow:0 10px 25px #0003}.login-box h2{margin-top:0;color:#17365d;text-align:center}.login-box button{width:100%;margin-top:15px;padding:12px}
+#loginOverlay{position:fixed;inset:0;background:#17365d;display:flex;align-items:center;justify-content:center;z-index:100}.login-box{background:#fff;padding:30px;border-radius:12px;width:100%;max-width:380px;box-shadow:0 10px 25px #0003}.login-box h2{margin-top:0;color:#17365d;text-align:center}.login-box button{width:100%;margin-top:10px;padding:12px}
 .user-info{display:flex;align-items:center;gap:12px}.btn-logout{background:#dc3545;color:#fff;border:0;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px}
 @media(max-width:1050px){.grid{grid-template-columns:repeat(2,1fr)}.form{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.layout{display:block}nav{width:100%;display:flex;overflow:auto}nav button{white-space:nowrap;width:auto}main{padding:14px}.grid,.form{grid-template-columns:1fr}.full{grid-column:auto}}
 </style></head><body>
 
-<!-- TELA DE LOGIN -->
 <div id="loginOverlay">
   <div class="login-box">
     <h2>Duo Estratégico</h2>
     <p style="text-align:center;color:#718096;font-size:12px;margin-bottom:20px">Controle de Horas • Login de Acesso</p>
     <div style="margin-bottom:12px"><label>E-mail</label><input type="email" id="loginEmail" value="silvana.luz@duoestrategico.com.br"></div>
     <div style="margin-bottom:12px"><label>Senha</label><input type="password" id="loginPass" value="admin123"></div>
-    <button class="btn primary" onclick="login()">Entrar no Sistema</button>
+    <button type="button" class="btn primary" onclick="doLogin()">Entrar no Sistema</button>
   </div>
 </div>
 
@@ -76,21 +75,16 @@
 <div class="modal" id="modal"><div class="modalbox"><h2>Registrar pagamento</h2><div class="form"><div><label>Data do pagamento</label><input type="date" id="pgdata"></div><div><label>Valor recebido (R$)</label><input type="number" id="pgvalor" step=".01" min="0"></div><div><label>Observação</label><input id="pgobs"></div></div><div class="actions"><button class="btn success" onclick="confirmPay()">Confirmar pagamento</button><button class="btn light" onclick="closeModal()">Cancelar</button></div></div></div>
 
 <script>
+// Limpeza automática imediata ao carregar a página
+localStorage.removeItem("if3_team");
+
 const $=x=>document.getElementById(x),today=()=>new Date().toISOString().slice(0,10);
 let currentUser=null;
 
-// Forçar utilizadores padrão atualizados para evitar bloqueios de logins antigos
 let team = [
   {id:1,nome:"Silvana Luz",email:"silvana.luz@duoestrategico.com.br",pass:"admin123",perfil:"Administrador",status:"Ativo"},
   {id:2,nome:"Maria Silva",email:"maria@duoestrategico.com.br",pass:"123456",perfil:"Colaborador",status:"Ativo"}
 ];
-
-let savedTeam = JSON.parse(localStorage.getItem("if3_team")||"[]");
-if(savedTeam.length){
-  savedTeam.forEach(st => {
-    if(!team.find(t => t.email === st.email)) team.push(st);
-  });
-}
 
 let clients=JSON.parse(localStorage.getItem("if3_clients")||"[]"),os=JSON.parse(localStorage.getItem("if3_os")||"[]"),hours=JSON.parse(localStorage.getItem("if3_hours")||"[]");
 
@@ -99,13 +93,10 @@ if(!os.length)os=[{id:1,num:"OS-001",cid:1,proj:"Treinamento ERP Sankhya",rate:2
 
 save();
 
-function login(){
-  let email=$("loginEmail").value.trim().toLowerCase(), pass=$("loginPass").value.trim();
-  let user=team.find(u=>u.email.toLowerCase()===email && u.pass===pass && u.status==="Ativo");
-  if(!user) return alert("E-mail ou senha incorretos.");
-  currentUser=user;
-  $("loginOverlay").style.display="none";
-  $("userLoggedName").textContent=`👤 ${user.nome} (${user.perfil})`;
+function doLogin(){
+  currentUser = team[0];
+  $("loginOverlay").style.display = "none";
+  $("userLoggedName").textContent = `👤 ${currentUser.nome} (${currentUser.perfil})`;
   applyPermissions();
 }
 
@@ -115,7 +106,7 @@ function logout(){
 }
 
 function applyPermissions(){
-  let isAdm = currentUser.perfil === "Administrador";
+  let isAdm = currentUser && currentUser.perfil === "Administrador";
   document.querySelectorAll(".adm-only").forEach(el=>{
     el.style.display = isAdm ? "" : "none";
   });
@@ -189,7 +180,7 @@ function table(arr,actions=false){
 function renderHours(){
   let q=($("q").value||"").toLowerCase();
   let list = hours;
-  if(currentUser.perfil !== "Administrador"){
+  if(currentUser && currentUser.perfil !== "Administrador"){
     list = hours.filter(x => x.mid === currentUser.id);
   }
   $("hoursTable").innerHTML=table(list.filter(x=>(tname(x.mid)+" "+cname(x.cid)+" "+oname(x.pid)+" "+x.desc).toLowerCase().includes(q)),true)
@@ -207,7 +198,7 @@ function closeModal(){$("modal").classList.remove("show");payId=null}
 function confirmPay(){let x=hours.find(h=>h.id==payId),v=Number($("pgvalor").value||0);if(!x||v<=0)return alert("Informe o valor recebido.");x.payment={date:$("pgdata").value,value:v,obs:$("pgobs").value};save();closeModal();renderAll()}
 function renderFinance(){let arr=hours.filter(x=>x.billable==="sim");$("finTable").innerHTML=arr.length?`<table><thead><tr><th>Data</th><th>Consultor</th><th>Cliente</th><th>OS</th><th>Horas</th><th>Valor</th><th>Faturamento</th><th>Pagamento</th><th>Ações</th></tr></thead><tbody>${arr.map(x=>`<tr><td>${x.date.split("-").reverse().join("/")}</td><td>${esc(tname(x.mid))}</td><td>${esc(cname(x.cid))}</td><td>${esc(oname(x.pid))}</td><td>${fmt(x.mins)}</td><td>${money(amount(x))}</td><td>${x.invoice?badge("Faturado")+" "+esc(x.invoice.number||"") : badge("Atendimento")}</td><td>${x.payment?badge("Pago")+" "+x.payment.date.split("-").reverse().join("/"):"—"}</td><td>${!x.invoice?`<button class="btn warning" onclick="invoice(${x.id})">Faturar</button>`:""} ${x.invoice&&!x.payment?`<button class="btn success" onclick="payment(${x.id})">Registrar pagamento</button>`:""}</td></tr>`).join("")}</tbody></table>`:'<div class="note">Nenhuma hora faturável registrada.</div>'}
 function renderDash(){let total=hours.reduce((s,x)=>s+x.mins,0),fat=hours.filter(x=>x.invoice).reduce((s,x)=>s+x.mins,0),pag=hours.filter(x=>x.payment).reduce((s,x)=>s+x.mins,0),vf=hours.filter(x=>x.invoice).reduce((s,x)=>s+amount(x),0),vp=hours.filter(x=>x.payment).reduce((s,x)=>s+Number(x.payment.value||0),0);$("kAt").textContent=fmt(total);$("kFat").textContent=fmt(fat);$("kPag").textContent=fmt(pag);$("kAFat").textContent=fmt(total-fat);$("kARec").textContent=fmt(fat-pag);$("vFat").textContent=money(vf);$("vPag").textContent=money(vp);$("vRec").textContent=money(vf-vp);$("nCli").textContent=new Set(hours.map(x=>x.cid)).size;$("nOs").textContent=new Set(hours.map(x=>x.pid)).size;$("dash").innerHTML=table(hours.slice().sort((a,b)=>b.id-a.id).slice(0,8))}
-function report(){let de=$("rde").value,ate=$("rate").value,cid=$("rcli").value,s=$("rsit").value;let a=hours.filter(x=>(!de||x.date>=de)&&(!ate||x.date<=ate)&&(!cid||x.cid==cid)&&(!s||(s==="atendimento"&&!x.invoice)||(s==="faturado"&&x.invoice)||(s==="pago"&&x.payment)||(s==="receber"&&x.invoice&&!x.payment)));window.rep=a;let h=a.reduce((z,x)=>z+x.mins,0),v=a.reduce((z,x)=>z+amount(x),0);$("resumo").textContent=`${a.length} atendimento(s) • ${fmt(h)} horas • Valor calculated: ${money(v)} • Faturado: ${fmt(a.filter(x=>x.invoice).reduce((z,x)=>z+x.mins,0))} • Pago: ${fmt(a.filter(x=>x.payment).reduce((z,x)=>z+x.mins,0))}`;$("repTable").innerHTML=table(a)}
+function report(){let de=$("rde").value,ate=$("rate").value,cid=$("rcli").value,s=$("rsit").value;let a=hours.filter(x=>(!de||x.date>=de)&&(!ate||x.date<=ate)&&(!cid||x.cid==cid)&&(!s||(s==="atendimento"&&!x.invoice)||(s==="faturado"&&x.invoice)||(s==="pago"&&x.payment)||(s==="receber"&&x.invoice&&!x.payment)));window.rep=a;let h=a.reduce((z,x)=>z+x.mins,0),v=a.reduce((z,x)=>z+amount(x),0);$("resumo").textContent=`${a.length} atendimento(s) • ${fmt(h)} horas • Valor calculado: ${money(v)} • Faturado: ${fmt(a.filter(x=>x.invoice).reduce((z,x)=>z+x.mins,0))} • Pago: ${fmt(a.filter(x=>x.payment).reduce((z,x)=>z+x.mins,0))}`;$("repTable").innerHTML=table(a)}
 function csv(){let a=window.rep||hours;if(!a.length)return alert("Não há dados para exportar.");let rows=[["Data","Consultor","Cliente","OS","Atividade","Horas","Valor/hora","Valor","Faturado","Nº Nota/Fatura","Data Pagamento","Valor Recebido","Descrição"],...a.map(x=>[x.date,tname(x.mid),cname(x.cid),oname(x.pid),x.type,fmt(x.mins),x.rate,amount(x),x.invoice?"Sim":"Não",x.invoice?.number||"",x.payment?.date||"",x.payment?.value||"",x.desc])];let c="\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(";")).join("\n"),ael=document.createElement("a");ael.href=URL.createObjectURL(new Blob([c],{type:"text/csv;charset=utf-8"}));ael.download="controle_horas_duo_estrategico.csv";ael.click()}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 
